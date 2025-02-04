@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <h1>Executive Orders Dashboard</h1>
+  <table class="table table-bordered w-100">
+    <colgroup>
+      <col>
+      <col>
+      <col style="width: 200px;">
+      <col style="width: 200px;">
+      <col>
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Document Number</th>
+        <th>Title</th>
+        <th>
+          <a href="{{ url_for('index', sort_by='signing_date', sort_order='desc' if sort_by=='signing_date' and sort_order=='asc' else 'asc') }}"
+             style="color: inherit; text-decoration: none;">
+            Signing Date
+            {% if sort_by == 'signing_date' %}
+              {% if sort_order == 'asc' %}
+                &#9650;
+              {% else %}
+                &#9660;
+              {% endif %}
+            {% endif %}
+          </a>
+        </th>
+        <th>
+          <a href="{{ url_for('index', sort_by='publication_date', sort_order='desc' if sort_by=='publication_date' and sort_order=='asc' else 'asc') }}"
+             style="color: inherit; text-decoration: none;">
+            Publication Date
+            {% if sort_by == 'publication_date' %}
+              {% if sort_order == 'asc' %}
+                &#9650;
+              {% else %}
+                &#9660;
+              {% endif %}
+            {% endif %}
+          </a>
+        </th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order in orders %}
+      <tr>
+        <td>{{ order.doc_number }}</td>
+        <td>{{ order.title }}</td>
+        <td>{{ order.signing_date }}</td>
+        <td>{{ order.publication_date }}</td>
+        <td>
+          <a href="{{ url_for('order_detail', document_number=order.doc_number) }}" class="btn btn-primary btn-sm">View Details</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %} 

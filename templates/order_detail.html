@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ order.data.title }} - Executive Order Details</title>
+  <!-- Using Bootstrap for basic responsiveness and styling -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .detail-header {
+      padding: 20px 0;
+    }
+    .detail-header h1 {
+      margin-bottom: 0.5rem;
+    }
+    .metadata,
+    .versioning {
+      font-size: 0.9em;
+      color: #555;
+    }
+    .agency-list li {
+      margin-bottom: 5px;
+    }
+    .actions a,
+    .actions button {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header Section: Title, Document Number, and Type -->
+    <div class="detail-header">
+      <h1>{{ order.data.title }}</h1>
+      <p class="lead">
+        Document Number: {{ order.data.document_number }} | 
+        Type: {{ order.data.type }}
+      </p>
+    </div>
+    <hr>
+
+    <div class="row">
+      <!-- Metadata Section -->
+      <div class="col-md-8">
+        <h3>Executive Order Details</h3>
+        <ul class="list-unstyled">
+          <li><strong>Publication Date:</strong> {{ order.data.publication_date }}</li>
+          {% if order.content.signing_date %}
+            <li><strong>Signing Date:</strong> {{ order.content.signing_date }}</li>
+          {% endif %}
+          {% if order.content.citation %}
+            <li><strong>Citation:</strong> {{ order.content.citation }}</li>
+          {% endif %}
+          {% if order.data.abstract or order.content.abstract %}
+            <li>
+              <strong>Abstract:</strong>
+              <p>{{ order.data.abstract or order.content.abstract }}</p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <!-- Agency Details Section -->
+      <div class="col-md-4">
+        <h4>Agency Information</h4>
+        <ul class="agency-list">
+          {% if order.data.agencies %}
+            {% for agency in order.data.agencies %}
+              <li>
+                <a href="{{ agency.url }}" target="_blank">{{ agency.name }}</a>
+              </li>
+            {% endfor %}
+          {% elif order.content.agencies %}
+            {% for agency in order.content.agencies %}
+              <li>
+                <a href="{{ agency.url }}" target="_blank">{{ agency.name }}</a>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li>No agency information available.</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Versioning Information Section -->
+    <div class="versioning">
+      <p><strong>Saved at:</strong> {{ order.metadata.saved_at }}</p>
+      <p><strong>Last Updated:</strong> {{ order.metadata.last_updated }}</p>
+    </div>
+
+    <hr>
+
+    <!-- Actions Section -->
+    <div class="actions">
+      <a href="{{ order.content.html_url }}" target="_blank" class="btn btn-primary">View Full Text</a>
+      <a href="{{ order.content.pdf_url }}" target="_blank" class="btn btn-secondary">Download PDF</a>
+      <button id="summarize-btn" data-doc="{{ order.data.document_number }}" class="btn btn-info">Summarize Text</button>
+    </div>
+    
+    <hr>
+
+    <!-- Summary Container (hidden initially) -->
+    <div id="summary-container" style="display:none;"></div>
+    
+    <!-- (Optional) Debug: Print raw JSON data -->
+    <pre>{{ order | tojson(indent=2) }}</pre>
+  </div>
+
+  <!-- Bootstrap JS dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- JavaScript to handle summarization via AJAX -->
+  <script>
+    document.getElementById('summarize-btn').addEventListener('click', function() {
+      var btn = this;
+      var docNumber = btn.getAttribute('data-doc');
+      
+      // Disable the button and show loading state.
+      btn.disabled = true;
+      var summaryContainer = document.getElementById('summary-container');
+      summaryContainer.style.display = 'block';
+      summaryContainer.innerHTML = '<div class="alert alert-info">Loading summary...</div>';
+      
+      // Make AJAX call to get the summary.
+      fetch(`/order/${docNumber}/summarize`, {
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Insert the summary – replacing newline characters with <br> tags.
+        summaryContainer.innerHTML = `
+          <div class="card mt-3 mb-3">
+            <div class="card-body">
+              <h4 class="card-title">Summary</h4>
+              <p class="card-text">${data.summary.replace(/\n/g, '<br>')}</p>
+            </div>
+          </div>
+        `;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        summaryContainer.innerHTML = '<div class="alert alert-danger">Error loading summary. Please try again later.</div>';
+      })
+      .finally(() => {
+        btn.disabled = false;
+      });
+    });
+  </script>
+</body>
+</html> 
