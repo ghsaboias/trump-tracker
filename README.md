@@ -2,7 +2,11 @@
 
 **Track executive orders and get professional summaries at a glance.**
 
+## Dashboard
+
 ![Dashboard](screenshots/dashboard.png)
+
+## Order Detail
 
 ![Order Detail](screenshots/order_detail.png)
 
