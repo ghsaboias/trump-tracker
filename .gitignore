@@ -7,3 +7,7 @@ __pycache__/
 *.pyz
 .env
 executive_orders/
+.cursorrules
+DEPLOYMENT.md
+DATA_STRUCTURE.md
+.cursorrules
