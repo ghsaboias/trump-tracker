@@ -4,6 +4,14 @@
 
 Trump Tracker is a Python-based web application for retrieving, storing, and analyzing executive orders from the Federal Register. The project uses Flask for web interface, provides a systemized approach to executive order data management, and leverages the Groq API for text summarization.
 
+## Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+## Order Detail
+
+![Order Detail](screenshots/order_detail.png)
+
 ## Technical Components
 
 ### Project Structure
