@@ -2,6 +2,10 @@
 
 **Track executive orders and get professional summaries at a glance.**
 
+![Dashboard](screenshots/dashboard.png)
+
+![Order Detail](screenshots/order_detail.png)
+
 ---
 
 ## Project Overview
@@ -119,17 +123,6 @@ Contains helper functions to generate a concise summary of the executive order t
   
 - **`format_summary(summary: str) -> str`:**  
   Formats the generated summary (for example, converting markdown-like bold text to HTML `<strong>` tags) for improved readability.
-
----
-
-## Screenshots
-
-*(Images will be added later in the `screenshots` folder.)*
-
-- **Dashboard View:** `screenshots/dashboard.png`
-- **Order Detail View:** `screenshots/order_detail.png`
-
----
 
 ## Contributing
 
