@@ -1,19 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Executive Orders Dashboard</title>
-  <!-- Using Bootstrap for simple styling -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    .container {
+  <head>
+    <meta charset="UTF-8" />
+    <title>Executive Orders Dashboard</title>
+    <!-- Favicon links -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
+    <link
+      rel="shortcut icon"
+      type="image/png"
+      href="{{ url_for('static', filename='img/favicon.png') }}"
+    />
+    <!-- Using Bootstrap for simple styling -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      .container {
         min-width: 80%;
-    }
-  </style>
-</head>
-<body>
-  <div class="container mt-4">
-    {% block content %}{% endblock %}
-  </div>
-</body>
-</html> 
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">{% block content %}{% endblock %}</div>
+  </body>
+</html>
